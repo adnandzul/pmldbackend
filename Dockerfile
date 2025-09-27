@@ -1,15 +1,14 @@
+# Dockerfile BARU (Benar)
+
 FROM python:3.9-slim
 
-WORKDIR /app
+WORKDIR /code
 
 COPY requirements.txt .
-
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Salin direktori 'app' ke dalam direktori kerja di container
-COPY ./app .
+COPY ./app /code/app/
 
-EXPOSE 8000
+EXPOSE 4000
 
-# Perintah CMD diupdate untuk merujuk ke 'main:app' di dalam modul 'app'
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "4000"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "4000"]
