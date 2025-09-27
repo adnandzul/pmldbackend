@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  # Layanan untuk database PostgreSQL
+  db:
+    image: postgres:13
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_DB=pentest_db
+
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://admin:secret@db/pentest_db
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:
