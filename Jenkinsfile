@@ -13,7 +13,7 @@ pipeline {
             steps {
                 echo ' menyiapkan environtment variables'
                 withCredentials([file(credentialsId: 'env-db-file-pmld', variable: 'ENV_DB'),
-                file(credentialsid: 'env-api-file-pmld', variable: 'ENV_API')]) {
+                file(credentialsId: 'env-api-file-pmld', variable: 'ENV_API')]) {
                     sh 'cp $ENV_DB /app/.env.db'
                     sh 'cp $ENV_API .env.api'
 
