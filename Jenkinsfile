@@ -14,7 +14,7 @@ pipeline {
                 echo ' menyiapkan environtment variables'
                 withCredentials([file(credentialsId: 'env-db-file-pmld', variable: 'ENV_DB'),
                 file(credentialsId: 'env-api-file-pmld', variable: 'ENV_API')]) {
-                    sh 'cp $ENV_DB /app/.env.db'
+                    sh 'cp $ENV_DB .env.db'
                     sh 'cp $ENV_API .env.api'
 
                     echo 'Membangun image yang didefinisikan di docker-compose.yml...'
