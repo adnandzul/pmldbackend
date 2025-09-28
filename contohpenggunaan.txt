@@ -1,0 +1,21 @@
+http://128.199.196.79:4000/companies/
+
+{
+  "nama_perusahaan": "PT Teknologi Aman",
+  "detail_perusahaan": "Perusahaan penyedia layanan cloud.",
+  "kendala": "Ingin memeriksa keamanan web server utama kami."
+}
+
+http://128.199.196.79:4000/pentest/
+
+{
+  "company_id": 1,
+  "target_ip": "192.168.1.10",
+  "cve_list": [
+    "CVE-2021-44228",
+    "CVE-2022-1388",
+    "CVE-2020-1472"
+  ]
+}
+
+http://128.199.196.79:4000/history/reports/
