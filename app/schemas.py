@@ -33,3 +33,8 @@ class Company(CompanyBase):
 
     class Config:
         orm_mode = True
+
+class PentestRequest(BaseModel):
+    company_id: int
+    target_ip: str
+    cve_list: List[str]
