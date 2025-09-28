@@ -11,8 +11,15 @@ pipeline {
 
         stage('2. Build Services') {
             steps {
-                echo 'Membangun image untuk layanan yang didefinisikan di docker-compose.yml...'
-                sh 'docker-compose build'
+                echo ' menyiapkan environtment variables'
+                withCredentials([file(credentialsId: 'env-db-file-pmld', variable: 'ENV_DB'),
+                file(credentialsid: 'env-api-file-pmld', variable: 'ENV_API')]) {
+                    sh 'cp $ENV_DB /app/.env.db'
+                    sh 'cp $ENV_API .env.api'
+
+                    echo 'Membangun image yang didefinisikan di docker-compose.yml...'
+                    sh 'docker-compose build'
+                }
             }
         }
 
