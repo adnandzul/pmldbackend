@@ -1,5 +1,6 @@
+
 from pydantic import BaseModel
-from typing import List, Optional
+from typing import List
 import datetime
 
 class ReportBase(BaseModel):
@@ -16,6 +17,7 @@ class Report(ReportBase):
     class Config:
         orm_mode = True
 
+
 class CompanyBase(BaseModel):
     nama_perusahaan: str
     detail_perusahaan: str
@@ -31,8 +33,3 @@ class Company(CompanyBase):
 
     class Config:
         orm_mode = True
-
-class PentestRequest(BaseModel):
-    company_id: int
-    target_ip: str
-    cve_list: List[str]
