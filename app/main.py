@@ -7,12 +7,10 @@ import random
 from . import models, schemas
 from .database import SessionLocal, engine
 
-# Membuat semua tabel di database (jika belum ada)
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Pentest API", description="API untuk simulasi alur penetration testing")
 
-# Dependency untuk mendapatkan sesi database
 def get_db():
     db = SessionLocal()
     try:
@@ -20,7 +18,6 @@ def get_db():
     finally:
         db.close()
 
-# === SIMULASI PENTEST ===
 def simulate_pentest(target_ip: str, cve_list: List[str]) -> str:
     """Fungsi ini mensimulasikan hasil pentest dan mengembalikannya sebagai JSON string."""
     vulnerabilities = []
@@ -39,7 +36,6 @@ def simulate_pentest(target_ip: str, cve_list: List[str]) -> str:
         "report_generated_at": datetime.datetime.now().isoformat()
     }
     
-    # Mengubah dictionary menjadi JSON string
     return json.dumps(report_data, indent=4)
 
 # === ENDPOINTS ===
@@ -74,11 +70,9 @@ def start_pentest(request: schemas.PentestRequest, db: Session = Depends(get_db)
     if not db_company:
         raise HTTPException(status_code=404, detail="Company ID tidak ditemukan")
     
-    # 1. Simulasikan proses pentest
     hasil_json = simulate_pentest(request.target_ip, request.cve_list)
     
-    # 2. Buat objek laporan untuk disimpan ke database
-    cve_string = ", ".join(request.cve_list) # Gabungkan list CVE menjadi satu string
+    cve_string = ", ".join(request.cve_list) 
     
     new_report = models.Report(
         company_id=request.company_id,
@@ -87,7 +81,6 @@ def start_pentest(request: schemas.PentestRequest, db: Session = Depends(get_db)
         hasil_pentest_json=hasil_json
     )
     
-    # 3. Simpan laporan ke database
     db.add(new_report)
     db.commit()
     db.refresh(new_report)

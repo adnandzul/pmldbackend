@@ -1,30 +1,38 @@
-from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey
-from sqlalchemy.orm import relationship
-from .database import Base
+from pydantic import BaseModel
+from typing import List, Optional
 import datetime
 
-class Company(Base):
-    __tablename__ = "companies"
+class ReportBase(BaseModel):
+    target_ip: str
+    cve_list: str
+    status: str
+    hasil_pentest_json: str
 
-    id = Column(Integer, primary_key=True, index=True)
-    nama_perusahaan = Column(String, index=True, unique=True)
-    detail_perusahaan = Column(Text)
-    kendala = Column(Text)
-    created_at = Column(DateTime, default=datetime.datetime.now)
+class Report(ReportBase):
+    id: int
+    company_id: int
+    timestamp: datetime.datetime
 
-    reports = relationship("Report", back_populates="company")
+    class Config:
+        orm_mode = True
 
+class CompanyBase(BaseModel):
+    nama_perusahaan: str
+    detail_perusahaan: str
+    kendala: str
 
-class Report(Base):
-    __tablename__ = "reports"
+class CompanyCreate(CompanyBase):
+    pass
 
-    id = Column(Integer, primary_key=True, index=True)
-    target_ip = Column(String, index=True)
-    cve_list = Column(String) 
-    status = Column(String, default="Selesai")
-    hasil_pentest_json = Column(Text) 
-    timestamp = Column(DateTime, default=datetime.datetime.now)
-    
-    company_id = Column(Integer, ForeignKey("companies.id"))
+class Company(CompanyBase):
+    id: int
+    created_at: datetime.datetime
+    reports: List[Report] = []
 
-    company = relationship("Company", back_populates="reports")
+    class Config:
+        orm_mode = True
+
+class PentestRequest(BaseModel):
+    company_id: int
+    target_ip: str
+    cve_list: List[str]
