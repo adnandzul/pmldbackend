@@ -37,5 +37,23 @@ pipeline {
             echo 'Membersihkan sisa build...'
             sh 'docker image prune -f'
         }
+        success {
+            script {
+                slackSend(
+                    channel: '#all-mail',
+                    color: 'good',
+                    message: "Success: Job ${env.JOB_NAME} build #${env.BUILD_NUMBER} completed successfully.\nMore info: ${env.BUILD_URL}"
+            )
+            }
+        }
+        failure {
+            script {
+                slackSend(
+                    channel: '#all-mail',
+                    color: 'danger',
+                    message: "Failed: Job ${env.JOB_NAME} build #${env.BUILD_NUMBER} failure.\ncheck console output: ${env.BUILD_URL}"
+            )
+            }
+        }
     }
 }
